@@ -1,0 +1,12 @@
+table{
+    background-color: aquamarine;
+    width: 100%;
+
+}
+td{
+    border:2px black solid;
+}
+.button{
+    margin: 5px;
+    display: inline-block;
+}
