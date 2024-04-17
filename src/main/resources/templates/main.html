@@ -13,11 +13,15 @@
 
     <table class="text-dark">
         <tr>
-            <td th:each="task:${tasks}"><span th:text="${task}"></span></td>
+            <td>name</td>
+            <td th:each="task:${tasks}"><a th:href="'https://www.eolymp.com/ru/problems/'+${task}"><span th:text="${task}"></span></a></td>
+            <td>suma</td>
         </tr>
         <tr th:each="person:${persons}">
-            <td th:text="${person.login}">
-            <td th:each="task:${person.tasks}"><span th:text="${task}"></span></td>
+            <td th:text="${person.login}"></td>
+            <td th:each="task:${person.tasks}"><span th:text="${task}"></span>%</td>
+            <td th:text="${person.sumTasks}"></td>
+
 
         </tr>
     </table>
@@ -30,7 +34,7 @@
         <button>Add Task</button>
     </a></div>
     <div class="button"><a th:href="@{/}">
-        <button>If problems press me</button>
+        <button>Press me when finish adding persons and tasks</button>
     </a></div>
 </div>
 </body>

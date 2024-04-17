@@ -4,7 +4,8 @@ import java.util.ArrayList;
 
 public class Person {
     String login;
-    ArrayList<String> tasks=new ArrayList<>();
+    ArrayList<Integer> tasks=new ArrayList<>();
+    public int sumTasks = 0;
 
     public Person() {
     }
@@ -15,7 +16,8 @@ public class Person {
 
 
     public void addTasks(String task) {
-        tasks.add(task);
+        tasks.add(Integer.valueOf(task));
+//        sumTasks++;
     }
 
     public Person(String login) {
@@ -30,11 +32,11 @@ public class Person {
         this.login = login;
     }
 
-    public ArrayList<String> getTasks() {
+    public ArrayList<Integer> getTasks() {
         return tasks;
     }
 
-    public void setTasks(ArrayList<String> tasks) {
+    public void setTasks(ArrayList<Integer> tasks) {
         this.tasks = tasks;
     }
 }

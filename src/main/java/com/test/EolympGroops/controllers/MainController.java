@@ -1,6 +1,7 @@
 package com.test.EolympGroops.controllers;
 
 import com.test.EolympGroops.controllers.back.Eolymp;
+import com.test.EolympGroops.controllers.back.Eolymp2;
 import com.test.EolympGroops.controllers.back.Person;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,7 @@ import java.util.List;
 public class MainController {
 
     ArrayList<Person> persons = new ArrayList<Person>();
-    ArrayList<String> tasks = new ArrayList<>(List.of(new String[]{"name"}));
+    ArrayList<String> tasks = new ArrayList<>();
 
 
 
@@ -25,27 +26,55 @@ public class MainController {
         Eolymp eolymp = new Eolymp();
 
         for (int i = 0; i < persons.size(); i++) {
-            ArrayList<String> persons_help = new ArrayList<String>();
-            for (int j = 1; j < tasks.size(); j++) {
+            ArrayList<Integer> persons_help = new ArrayList<Integer>();
+            for (int j = 0; j < tasks.size(); j++) {
                 persons_help.add(eolymp.eolymp(persons.get(i).getLogin(), tasks.get(j)));
             }
             persons.get(i).setTasks(persons_help);
         }
-
+        for (int i = 0; i < persons.size(); i++) {
+            int sumTasks = 0;
+            Person person=persons.get(i);
+            for (int j = 0; j < person.getTasks().size(); j++) {
+                sumTasks+=person.getTasks().get(j);
+            }
+            persons.get(i).sumTasks=sumTasks;
+        }
+        sortPersons();
 
         model.addAttribute("title","Main page");
         model.addAttribute("persons",persons);
         model.addAttribute("tasks",tasks);
+//        model.addAttribute("sumTasks",sumTasks);
+
 //        model.addAttribute("prossent",prossent);
         return "main";
     }
-    /*@GetMapping("/sasa")
-    public String sasa(Model model) {
-     //   model.addAttribute("title", "Main page");
-       // return "addPerson";
-        return "sassa";
-    }*/
 
+    private void sortPersons() {
+        ArrayList<Person> personsHelpSort = new ArrayList<Person>();
+        ArrayList<Integer> sumsTasks = new ArrayList<>();
+        for (int i = 0; i < persons.size(); i++) {
+            sumsTasks.add(persons.get(i).sumTasks);
+        }
+        for (int i = 0; i < sumsTasks.size(); i++) {
+            int maxsum=max(sumsTasks);
+            int indmaxsum = sumsTasks.indexOf(maxsum);
+            personsHelpSort.add(persons.get(indmaxsum));
+            sumsTasks.set(indmaxsum,-2);
+        }
+
+        persons= (ArrayList<Person>) personsHelpSort.clone();
+    }
+
+    private int max(ArrayList<Integer> sumsTasks) {
+        int maximum = sumsTasks.get(0);
+        for (int i = 1; i < sumsTasks.size(); i++) {
+            if (maximum < sumsTasks.get(i))
+                maximum = sumsTasks.get(i);
+        }
+        return maximum;
+    }
 
 
     @PostMapping("/addPerson")
@@ -54,14 +83,21 @@ public class MainController {
         Person person = new Person(login);
 
 
-        for (int j = 1; j < tasks.size(); j++) {
-            person.addTasks(eolymp.eolymp(person.getLogin(), tasks.get(j)));
-        }
+//        for (int j = 0; j < tasks.size(); j++) {
+//            person.addTasks(eolymp.eolymp(person.getLogin(), tasks.get(j)));
+//        }
         persons.add(person);
+        int sumTasks = 0;
+        person.sumTasks=sumTasks;
+
+
+
+
 
         model.addAttribute("title","Main page");
         model.addAttribute("persons",persons);
         model.addAttribute("tasks",tasks);
+//        model.addAttribute("sumTasks",sumTasks);
 //        return "redirect:/";
         return "main";
     }

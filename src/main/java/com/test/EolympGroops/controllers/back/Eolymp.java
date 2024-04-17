@@ -1,65 +1,43 @@
 package com.test.EolympGroops.controllers.back;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.testng.annotations.Test;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import java.util.Arrays;
+
 
 public class Eolymp {
-    WebDriver driver = new ChromeDriver();
-    String eolymp_url="https://www.eolymp.com/ru/users/";
-
-    private void visitEolymp(String login){
-//        driver.navigate().to(eolymp_url+login+"/punchcard");
-        driver.get(eolymp_url+login+"/punchcard");
-    }
-
-/*    @Test
-    public int eolympTest(){
-        String login="artem_linnik";
-        int task = 263;
-        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
-        visitEolymp(login);
-        List<WebElement> elements=driver.findElements(By.className("eo-punchcard__cell"));
-        for (WebElement element : elements) {
-            if (element.getAttribute("href").equals("https://www.eolymp.com/ru/problems/"+task)){
-                System.out.println(getProssent(element.getAttribute("title")));
-                return getProssent(element.getAttribute("title"));
-            }
+    public Integer eolymp( String login,  String task) {
+        RestTemplate restTemplate = new RestTemplate();
+        String punchcardUrl = "https://www.eolymp.com/ru/users/" + login + "/punchcard";
+        ResponseEntity<String> response = restTemplate.getForEntity(punchcardUrl, String.class);
+        String responseBody = response.getBody();
+        if (responseBody != null && responseBody.contains("/ru/problems/" + task)) {
+            Integer title = getTitle(responseBody, task);
+            return title;
+        } else {
+//            return "task not found";
+            return -1;
         }
+    }
 
-
-        return 0;
-    }*/
-    public String eolymp(String login , String task){
-        System.out.println(login+" "+task);
-//        WebDriver driver = new ChromeDriver();
-        System.setProperty("webdriver.chrome.driver", "D:\\tools\\chromeDriver\\chromedriver.exe");
-        visitEolymp(login);
-        List<WebElement> elements=driver.findElements(By.className("eo-punchcard__cell"));
-        for (WebElement element : elements) {
-            if (element.getAttribute("href").equals("https://www.eolymp.com/ru/problems/"+task)){
-                System.out.println(getProssent(element.getAttribute("title")));
-                String rez = getProssent(element.getAttribute("title"));
-//                driver.quit();
-                return rez;
-            }
+    private Integer getTitle(String responseBody, String task) {
+        int startIndex = responseBody.indexOf("/ru/problems/" + task);
+        String startString=responseBody.substring(startIndex-12);
+        int endIndex = startString.indexOf('%');
+        String title = startString.substring(0, endIndex);
+        char[] titlec=title.toCharArray();
+        if (titlec[0]==' '){
+            title=title.substring(1);
         }
-
-
-        return "0";
+        if (titlec[0]==','){
+            title=title.substring(2);
+        }
+//        if(title.substring(1).equals(" ")){
+//            title=title.substring(2,title.length());
+//        }
+        return Integer.valueOf(title);
     }
 
-
-    private String getProssent(String title) {
-        String[] s = title.split(" ");
-        String last=s[s.length - 1];
-        return last.substring(0,last.length()-1);
-
-    }
 
 }
-
