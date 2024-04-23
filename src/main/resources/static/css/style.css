@@ -1,6 +1,12 @@
+body{
+    background-color: darkcyan;
+}
+
+
 table{
     background-color: aquamarine;
-    width: 100%;
+    width: calc(100% );
+    /* margin: 20px; */
 
 }
 td{
@@ -9,4 +15,40 @@ td{
 .button{
     margin: 5px;
     display: inline-block;
+
+
+}
+button {
+    background-color: #044faa;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    transition: all 2s;
+}
+button:hover{
+    background-color: #9c03e9;
+    color: #000;
+}
+input{
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.mg-top{
+    margin-top: 5%;
+}
+.table-background{
+    background-color: #044faa;
+    padding: 30px;
 }
